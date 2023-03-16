@@ -8,11 +8,11 @@
 #include <stdio.h>
 
 // Инициализирует матрицу с главной диагональю равной 2. Остальные значения равны 1.
-void initDefaultMatrix(double** matrix, int n);
-void initVectorX(double *vector, int n);
-void initVectorB(double *vector, int n);
-void calcIteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n);
-int calcCriterion(double const* denominator, double const* vectorB, int n);
-double euclideanNorm(double const* vector, int n);
+void init_default_matrix(double** matrix, int n);
+void init_vector_x(double *vector, int n);
+void init_vector_b(double *vector, int n);
+void calc_iteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n);
+int calc_criterion(double const* denominator, double b_norm, int n);
+double euclidean_norm(double const* vector, int n);
 
 #endif

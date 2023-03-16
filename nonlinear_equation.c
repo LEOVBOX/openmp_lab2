@@ -1,9 +1,9 @@
-
 #include "matrix.h"
 #include "math.h"
 #include "constants.h"
+#include "omp.h"
 
-void initDefaultMatrix(double** matrix, int n)
+void init_default_matrix(double** matrix, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -19,7 +19,7 @@ void initDefaultMatrix(double** matrix, int n)
 	}
 }
 
-void initVectorB(double* vector, int n)
+void init_vector_b(double* vector, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -27,8 +27,9 @@ void initVectorB(double* vector, int n)
 	}
 }
 
-void initVectorX(double* vector, int n)
+void init_vector_x(double* vector, int n)
 {
+
 	for (int i = 0; i < n; i++)
 	{
 		vector[i] = 0.0;
@@ -36,37 +37,45 @@ void initVectorX(double* vector, int n)
 }
 
 
-void calcIteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n)
+void calc_iteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n)
 {
 	double resultNum;
-	for (int row = 0; row < n; row ++)
+	#pragma omp parallel default(none) shared(resBuffer, matrix, vectorX, vectorB, n) private(resultNum)
 	{
-		// Ax
-		resultNum = multVectors(vectorX, matrix[row], n);
-		// (Ax-b)
-		resultNum = resultNum - vectorB[0];
-		resBuffer[row] = resultNum;
+		#pragma omp for
+		for (int row = 0; row < n; row++)
+		{
+			// Ax
+			resultNum = mult_vectors(vectorX, matrix[row], n);
+			// (Ax-b)
+			resultNum = resultNum - vectorB[0];
+			resBuffer[row] = resultNum;
+		}
 	}
 
 }
 
-double euclideanNorm(double const* vector, int n)
+double euclidean_norm(double const* vector, int n)
 {
 	double result = 0;
-	for (int i = 0; i < n; i++)
+	int i;
+	#pragma omp parallel default(none) shared(n, i, result, vector)
 	{
-		result += vector[i] * vector[i];
+		#pragma omp for
+		for (i = 0; i < n; i++)
+		{
+			result += vector[i] * vector[i];
+		}
 	}
 	result = sqrt(result);
 	return result;
 }
 
-int calcCriterion(double const* denominator, double const* vectorB, int n)
+int calc_criterion(double const* denominator, double b_norm, int n)
 {
-	double vectorBNorm = euclideanNorm(vectorB, n);
-	double denominatorNorm = euclideanNorm(denominator, n);
-	double crit = (denominatorNorm / vectorBNorm);
-	//printf("Root: crit = %f , epsilon = %f\n", crit, EPSILON);
+	// Norm(Ax - b)
+	double denominator_norm = euclidean_norm(denominator, n);
+	double crit = (denominator_norm / b_norm);
 	if (crit < EPSILON)
 		return 1;
 	return 0;
