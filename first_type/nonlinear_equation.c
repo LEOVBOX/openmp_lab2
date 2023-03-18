@@ -1,7 +1,6 @@
 #include "matrix.h"
 #include "math.h"
 #include "constants.h"
-#include "omp.h"
 
 void init_default_matrix(double** matrix, int n)
 {

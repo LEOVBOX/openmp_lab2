@@ -5,8 +5,6 @@
 #ifndef MPI_LAB1_MATRIX_H
 #define MPI_LAB1_MATRIX_H
 
-void scanf_array(double *array, int *n);
-void scanfMatrix(double **matrix, int *n);
 void print_array(double *array, int n);
 void fprint_array(char* file_path, double *array, int n);
 void printMatrix(double **matrix, int n);
