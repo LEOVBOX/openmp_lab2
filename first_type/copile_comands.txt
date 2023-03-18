@@ -1,0 +1,1 @@
+gcc-12 -std=c99 -fopenmp -O3 -o prog2 main.c nonlinear_equation.c matrix.c
