@@ -28,13 +28,17 @@ int main()
 	int crit = 0;
 	while (crit == 0)
 	{
-		calc_iteration(result, matrix, vector_x, vector_b, N_NUM);
-		crit = calc_criterion(result, b_norm, N_NUM);
-		for (int i = 0; i < N_NUM; i++)
+		#pragma omp parallel default(none) shared(result, matrix, vector_x, vector_b, b_norm, crit)
 		{
-			result[i] *= TAU;
-			vector_x[i] -= result[i];
+			calc_iteration(result, matrix, vector_x, vector_b, N_NUM);
+			crit = calc_criterion(result, b_norm, N_NUM);
+			for (int i = 0; i < N_NUM; i++)
+			{
+				result[i] *= TAU;
+				vector_x[i] -= result[i];
+			}
 		}
+
 	}
 
 	//print_array(result, N_NUM);
