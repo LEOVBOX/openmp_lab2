@@ -28,11 +28,18 @@ int main()
 	int crit = 0;
 	while (crit == 0)
 	{
-		#pragma omp parallel default(none) shared(result, matrix, vector_x, vector_b, b_norm, crit)
+		int i;
+		#pragma omp parallel default(none) shared(result, matrix, vector_x, vector_b, b_norm, crit, i)
 		{
-			calc_iteration(result, matrix, vector_x, vector_b, N_NUM);
-			crit = calc_criterion(result, b_norm, N_NUM);
-			for (int i = 0; i < N_NUM; i++)
+			parallel_calc_iteration(result, matrix, vector_x, vector_b, N_NUM);
+			printf("NUM THREADS: %d", omp_get_num_threads());
+			#pragma omp single
+			{
+				crit = calc_criterion(result, b_norm, N_NUM);
+
+			}
+			#pragma omp for
+			for (i = 0; i < N_NUM; i++)
 			{
 				result[i] *= TAU;
 				vector_x[i] -= result[i];

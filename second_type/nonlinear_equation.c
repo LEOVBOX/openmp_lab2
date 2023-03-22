@@ -35,11 +35,12 @@ void init_vector_x(double* vector, int n)
 	}
 }
 
-
-void calc_iteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n)
+void parallel_calc_iteration(double* resBuffer, double** matrix, double* vectorX, const double* vectorB, int n)
 {
 	double resultNum;
-	for (int row = 0; row < n; row++)
+	int row;
+	#pragma omp for
+	for (row = 0; row < n; row++)
 	{
 		// Ax
 		resultNum = mult_vectors(vectorX, matrix[row], n);
@@ -47,7 +48,6 @@ void calc_iteration(double* resBuffer, double** matrix, double* vectorX, const d
 		resultNum = resultNum - vectorB[0];
 		resBuffer[row] = resultNum;
 	}
-
 }
 
 double euclidean_norm(double const* vector, int n)

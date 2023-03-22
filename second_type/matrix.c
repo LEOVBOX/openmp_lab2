@@ -2,8 +2,8 @@
 // Created by Леонид Шайхутдинов on 16.02.2023.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
 
 
 void print_array(double *array, int n)
