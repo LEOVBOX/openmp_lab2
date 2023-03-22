@@ -32,7 +32,6 @@ int main()
 		#pragma omp parallel default(none) shared(result, matrix, vector_x, vector_b, b_norm, crit, i)
 		{
 			parallel_calc_iteration(result, matrix, vector_x, vector_b, N_NUM);
-			printf("NUM THREADS: %d", omp_get_num_threads());
 			#pragma omp single
 			{
 				crit = calc_criterion(result, b_norm, N_NUM);
