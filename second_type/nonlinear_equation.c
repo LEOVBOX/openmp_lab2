@@ -39,6 +39,7 @@ void parallel_calc_iteration(double* resBuffer, double** matrix, double* vectorX
 {
 	double resultNum;
 	int row;
+	#pragma omp for
 	for (row = 0; row < n; row++)
 	{
 		// Ax
