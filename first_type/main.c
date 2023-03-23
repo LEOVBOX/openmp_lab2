@@ -48,7 +48,6 @@ int main()
 	free(result);
 	#pragma omp parallel default(none) shared(matrix)
 	{
-		#pragma omp for
 		for (int i = 0; i < N_NUM; i++)
 			free(matrix[i]);
 	}
