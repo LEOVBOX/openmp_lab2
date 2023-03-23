@@ -58,14 +58,11 @@ double euclidean_norm(double const* vector, int n)
 {
 	double result = 0;
 	int i;
-	#pragma omp parallel default(none) shared(n, i, result, vector)
+	for (i = 0; i < n; i++)
 	{
-		#pragma omp for
-		for (i = 0; i < n; i++)
-		{
-			result += vector[i] * vector[i];
-		}
+		result += vector[i] * vector[i];
 	}
+
 	result = sqrt(result);
 	return result;
 }
